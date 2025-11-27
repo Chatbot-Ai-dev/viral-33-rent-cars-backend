@@ -18,7 +18,7 @@ export class Reservation {
   @ApiProperty({ type: () => Client, description: 'Client associé à la réservation' })
   // FIX: Explicitly typed `client` to resolve circular dependency issue.
   // Eager loading removed to prevent circular dependency issues during serialization.
-  @ManyToOne(() => Client, (client: Client) => client.reservations)
+  @ManyToOne(() => Client, (client: Client) => client.reservations, { onDelete: 'CASCADE' })
   client: Client;
 
   @ApiProperty({ type: () => Vehicle, description: 'Véhicule associé à la réservation' })
