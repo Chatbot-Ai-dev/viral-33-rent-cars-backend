@@ -31,18 +31,34 @@ declare const process: any;
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      // C'EST ICI QUE NOUS AVONS CORRIGÉ : On utilise les variables DB_... définies dans Railway
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
-        entities: [User, Vehicle, Client, Reservation, Expense],
-        synchronize: true, // Attention: Mettre à false en production une fois stable
-        logging: false,
-      }),
+      // MODIFICATION ICI : On ajoute des logs pour déboguer et on convertit le port
+      useFactory: (configService: ConfigService) => {
+        const host = configService.get<string>('DB_HOST');
+        const port = configService.get<string>('DB_PORT');
+        const username = configService.get<string>('DB_USERNAME');
+        const password = configService.get<string>('DB_PASSWORD');
+        const database = configService.get<string>('DB_DATABASE');
+
+        // Ces logs apparaîtront dans tes "Deploy Logs" sur Railway
+        console.log('--- DEBUG DATABASE CONNECTION ---');
+        console.log(`DB_HOST: ${host}`);
+        console.log(`DB_PORT: ${port}`);
+        console.log(`DB_USERNAME: ${username}`);
+        console.log(`DB_DATABASE: ${database}`);
+        console.log('---------------------------------');
+
+        return {
+          type: 'mysql',
+          host: host,
+          port: parseInt(port), // On force la conversion en nombre
+          username: username,
+          password: password,
+          database: database,
+          entities: [User, Vehicle, Client, Reservation, Expense],
+          synchronize: true, // Attention: Mettre à false en production une fois stable
+          logging: false,
+        };
+      },
     }),
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'uploads'),
