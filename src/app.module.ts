@@ -31,17 +31,30 @@ declare const process: any;
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      // useFactory: (configService: ConfigService) => ({
+      //   type: 'mysql',
+      //   host: configService.get<string>('DB_HOST'),
+      //   port: configService.get<number>('DB_PORT'),
+      //   username: configService.get<string>('DB_USERNAME'),
+      //   password: configService.get<string>('DB_PASSWORD'),
+      //   database: configService.get<string>('DB_DATABASE'),
+      //   entities: [User, Vehicle, Client, Reservation, Expense],
+      //   synchronize: true, // Set to false for production and manual migrations
+      //   logging: false,
+      // }),
+
+      useFactory: () => ({
         type: 'mysql',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
+        host: 'sql309.byethost8.com',
+        port: 3306,
+        username: 'b8_40416883',
+        password: '123456789',
+        database: 'b8_40416883_viral33_rentcars',
         entities: [User, Vehicle, Client, Reservation, Expense],
-        synchronize: true, // Set to false for production and manual migrations
+        synchronize: false,
         logging: false,
-      }),
+      })
+
     }),
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'uploads'),
@@ -59,4 +72,4 @@ declare const process: any;
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
