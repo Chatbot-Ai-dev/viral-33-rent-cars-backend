@@ -25,48 +25,24 @@ declare const process: any;
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Makes the ConfigService available application-wide 
+      isGlobal: true,
       envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      // useFactory: (configService: ConfigService) => ({
-      //   type: 'mysql',
-      //   host: configService.get<string>('DB_HOST'),
-      //   port: configService.get<number>('DB_PORT'),
-      //   username: configService.get<string>('DB_USERNAME'),
-      //   password: configService.get<string>('DB_PASSWORD'),
-      //   database: configService.get<string>('DB_DATABASE'),
-      //   entities: [User, Vehicle, Client, Reservation, Expense],
-      //   synchronize: true, // Set to false for production and manual migrations
-      //   logging: false,
-      // }),
-
-      // useFactory: () => ({
-      //   type: 'mysql',
-      //   host: 'sql309.byethost8.com',
-      //   port: 3306,
-      //   username: 'b8_40416883',
-      //   password: '123456789',
-      //   database: 'b8_40416883_viral33_rentcars',
-      //   entities: [User, Vehicle, Client, Reservation, Expense],
-      //   synchronize: true,
-      //   logging: false,
-      // })
-
-      useFactory: () => ({
+      // C'EST ICI QUE NOUS AVONS CORRIGÉ : On utilise les variables DB_... définies dans Railway
+      useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: process.env.MYSQLHOST,           // Railway Private Domain
-        port: parseInt(process.env.MYSQLPORT), // 3306
-        username: process.env.MYSQLUSER,       // root
-        password: process.env.MYSQLPASSWORD,   // RNnKDSacMKVrZvOlblrzPTZynJbgdoIk
-        database: process.env.MYSQLDATABASE,   // railway
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
         entities: [User, Vehicle, Client, Reservation, Expense],
-        synchronize: true,                      // true pour dev/test
+        synchronize: true, // Attention: Mettre à false en production une fois stable
         logging: false,
-      })
-
+      }),
     }),
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'uploads'),
