@@ -43,15 +43,27 @@ declare const process: any;
       //   logging: false,
       // }),
 
+      // useFactory: () => ({
+      //   type: 'mysql',
+      //   host: 'sql309.byethost8.com',
+      //   port: 3306,
+      //   username: 'b8_40416883',
+      //   password: '123456789',
+      //   database: 'b8_40416883_viral33_rentcars',
+      //   entities: [User, Vehicle, Client, Reservation, Expense],
+      //   synchronize: true,
+      //   logging: false,
+      // })
+
       useFactory: () => ({
         type: 'mysql',
-        host: 'sql309.byethost8.com',
-        port: 3306,
-        username: 'b8_40416883',
-        password: '123456789',
-        database: 'b8_40416883_viral33_rentcars',
+        host: process.env.MYSQLHOST,           // Railway Private Domain
+        port: parseInt(process.env.MYSQLPORT), // 3306
+        username: process.env.MYSQLUSER,       // root
+        password: process.env.MYSQLPASSWORD,   // RNnKDSacMKVrZvOlblrzPTZynJbgdoIk
+        database: process.env.MYSQLDATABASE,   // railway
         entities: [User, Vehicle, Client, Reservation, Expense],
-        synchronize: true,
+        synchronize: true,                      // true pour dev/test
         logging: false,
       })
 
