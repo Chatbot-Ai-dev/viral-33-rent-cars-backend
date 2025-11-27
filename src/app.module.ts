@@ -51,7 +51,7 @@ declare const process: any;
         password: '123456789',
         database: 'b8_40416883_viral33_rentcars',
         entities: [User, Vehicle, Client, Reservation, Expense],
-        synchronize: false,
+        synchronize: true,
         logging: false,
       })
 
